@@ -12,3 +12,14 @@ Just a test job to show example of my code.
     virtualenv venv
     . venv/bin/activate
     pip install -r pip.req
+
+Add superuser:
+
+    ./manage.py createsuperuser
+
+
+Runserver:
+
+    ./manage.py runserver 0.0.0.0:8000
+
+And go to *http://localhost:8000/admin/*
