@@ -5,4 +5,4 @@ distribute
 django-debug-toolbar
 simplejson
 wsgiref
-sqlite3
+db-sqlite3

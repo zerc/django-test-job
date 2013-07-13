@@ -46,12 +46,12 @@ class ManAdmin(admin.ModelAdmin):
     def followers_count(self, obj):
         return obj.followers_count
 
-    def get_queryset(self, request):
+    def queryset(self, request):
         """
         Added prefetch_related and annotate for sql optimization
         """
-        return super(admin.ModelAdmin, self).get_queryset(request)\
-            .prefetch_related("follow").annotate(followers_count=Count("followers"))
+        return super(admin.ModelAdmin, self).queryset(request)\
+            .annotate(followers_count=Count("followers")).prefetch_related("follow")
 
 
 admin.site.register(Man, ManAdmin)
