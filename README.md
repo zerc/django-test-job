@@ -23,3 +23,25 @@ Runserver:
     ./manage.py runserver 0.0.0.0:8000
 
 And go to *http://localhost:8000/admin/*
+
+### Blog app
+This simples blog app with tags and comments (from box). Not so good solution, but easy and fast develop. Just for show example of.
+
+Run migrations:
+
+    ./manage.py migrate
+
+
+Run syncdb for add comments tables:
+
+    ./manage.py syncdb
+
+Apply fixtures:
+
+    ./manage.py loaddata initial.json
+
+Run tests if you whant:
+
+    ./manage.py test blog
+    
+Start server and got to posts main page: *http://localhost:8000/posts/*
