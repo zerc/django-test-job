@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load comments %}
+
+{% block page_title %}Django - {{ post.title|safe }}{% endblock %}
+
+{% block main %}
+  <a href="{% url 'posts' %}">Посты</a><br><br>
+
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.text }}</p>
+
+  <h3>Ваш комментарий:</h3>
+  {% render_comment_form for post %}
+
+  <hr>
+
+  {% get_comment_list for post as comments %}
+  <h3>Комментарии:</h3>
+  {% if comments %}
+    {% for comment in comments %}
+        {{ comment.user_name }} - {{ comment.submit_date }}
+        <p>{{ comment.comment }}</p>
+        <hr>
+    {% endfor %}
+  {% else %}
+    Пока никто не комментировал этот пост
+  {% endif %}
+{% endblock %}
