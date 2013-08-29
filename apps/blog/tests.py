@@ -1,11 +1,14 @@
 # coding: utf-8
 from django import test
 
-from .models import Post, Tag
+from .models import Post, Tag, Comment
 
 
 class PostsTest(test.TestCase):
     fixtures = ['initial.json']
+
+    def _get_post(self):
+        return Post.objects.latest()
 
     def test_post_list(self):
         response = self.client.get('/posts/')
@@ -14,7 +17,7 @@ class PostsTest(test.TestCase):
         self.assertEqual(len(response.context['posts']), 3)
 
     def test_post_detail(self):
-        post = Post.objects.latest()
+        post = self._get_post()
         response = self.client.get(post.get_absolute_url())
 
         self.assertEqual(response.status_code, 200)
@@ -33,3 +36,21 @@ class PostsTest(test.TestCase):
         self.assertItemsEqual(
             sorted(response.context['posts'].values_list('pk', flat=True)),
             sorted(tag.post_set.values_list('pk', flat=True)))
+
+    def test_comments(self):
+        post = self._get_post()
+        response = self.client.get(post.get_absolute_url())
+
+        self.assertEqual(response.context['post'].comment_set.count(), 0)
+
+        response = self.client.post(post.get_absolute_url(), {'name': 'asdad'})
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['form'].is_valid())
+
+        response = self.client.post(post.get_absolute_url(), {
+            'post': post.pk,
+            'name': 'zero13cool',
+            'text': 'Test comment'}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(len(response.context['comments']), 1)

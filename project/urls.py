@@ -17,6 +17,4 @@ urlpatterns = patterns(
 
     url(r'posts/tag/(?P<slug>[\w\-_\d]+)/$',  TagsView.as_view(),
         name="posts_by_tag"),
-
-    (r'^comments/', include('django.contrib.comments.urls'))
 )

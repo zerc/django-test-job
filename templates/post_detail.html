@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load comments %}
 
 {% block page_title %}Django - {{ post.title|safe }}{% endblock %}
 
@@ -10,16 +9,26 @@
   <p>{{ post.text }}</p>
 
   <h3>Ваш комментарий:</h3>
-  {% render_comment_form for post %}
+  <form action="" method="post">{% csrf_token %}
+    {% for field in form %}
+      {% if not field.is_hidden %}
+        {{ field.errors }}<br>
+        {{ field.label_tag }}:<br>
+      {% endif %}
+      {{ field }}<br>
+    {% endfor %}
+
+    {{ form.as_ }}
+    <input type="submit" value="Комментировать" />
+  </form>
 
   <hr>
 
-  {% get_comment_list for post as comments %}
-  <h3>Комментарии:</h3>
+  <h3>Комментариeв: {{ post.comments_count }}</h3>
   {% if comments %}
     {% for comment in comments %}
-        {{ comment.user_name }} - {{ comment.submit_date }}
-        <p>{{ comment.comment }}</p>
+        {{ comment.name }} - {{ comment.created_datetime }}
+        <p>{{ comment.text }}</p>
         <hr>
     {% endfor %}
   {% else %}

@@ -10,6 +10,7 @@ class Post(models.Model):
 
     class Meta:
         get_latest_by = 'created_datetime'
+        ordering = ['-created_datetime']
 
     @models.permalink
     def get_absolute_url(self):
@@ -27,3 +28,13 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.slug
+
+
+class Comment(models.Model):
+    name = models.CharField(max_length='255', verbose_name=u'Имя')
+    text = models.TextField(verbose_name=u'Комментарий')
+    created_datetime = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(Post)
+
+    class Meta:
+        ordering = ['-created_datetime']

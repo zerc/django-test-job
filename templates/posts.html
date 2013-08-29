@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load comments %}
 
 {% block page_title %}Django - posts list{% endblock %}
 
@@ -10,9 +9,8 @@
 
   {% if posts %}
     {% for post in posts %}
-      {% get_comment_count for blog.post post.pk as comment_count %}
       <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
-      <small>комментариев: {{ comment_count }}, дата публикации: {{ post.created_datetime }}</small>
+      <small>комментариев: {{ post.comments_count }}, дата публикации: {{ post.created_datetime }}</small>
       <p>{{ post.text|truncatewords:10 }}</p>
       
       {% with tags=post.tags.all %}
